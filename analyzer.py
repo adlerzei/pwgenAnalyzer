@@ -1,5 +1,11 @@
 import subprocess
 import matplotlib.pyplot as plt
+import numpy as np
+from tikzplotlib import save as tikz_save
+
+#plt.style.use("fivethirtyeight")
+#plt.style.use("ggplot")
+plt.style.use("seaborn-whitegrid")
 
 out = subprocess.check_output(["pwgen", "-A", "8", "1000000"])
 passwords = out.decode("utf-8").split("\n")
@@ -30,10 +36,52 @@ print(count_key_pairs)
 print(sorted(count_key_pairs.items(), key=
              lambda kv: (kv[1]), reverse=True))
 
-plt.bar(range(len(count_chars)), count_chars.values(), align='center')
-plt.xticks(range(len(count_chars)), list(count_chars.keys()))
+print()
+print()
+
+key_list = sorted([x for x in count_chars.keys()])
+value_list = [count_chars.get(key) for key in key_list]
+
+print("\\begin{tabular}{@{} cc @{}} % @{} removes white spaces \n \
+        \\toprule \n \
+        \\textsc{Character} & \\textsc{Occurrences} \\\\ \n \
+        \\midrule")
+for i in range(0, len(count_chars)):
+    print("        " + key_list[i] + " & " + str(value_list[i]) + " \\\\")
+print("    \\bottomrule \n \
+\\end{tabular} ")
+
+plt.bar(range(len(count_chars)), value_list, align='center')
+plt.ylabel('Occurrences')
+plt.yticks(np.arange(0, 1000001, 200000))
+plt.xticks(range(len(count_chars)), key_list)
+
+tikz_save(
+    "fig/char_count.tex",
+    axis_height='\\figH',
+    axis_width='\\figW',
+    extra_axis_parameters=["tick label style={font=\\footnotesize}", "ytick distance=200000"]
+)
 
 plt.show()
+
+print()
+print()
+
+key_list = sorted([x for x in count_key_pairs.keys()])
+value_list = [count_key_pairs.get(key) for key in key_list]
+
+print("\\begin{tabular}{@{} cc @{}} % @{} removes white spaces \n \
+        \\toprule \n \
+        \\textsc{Character Pair} & \\textsc{Occurrences} \\\\ \n \
+        \\midrule")
+for i in range(0, len(count_key_pairs)):
+    print("        " + key_list[i][0] + " + " + key_list[i][1] + " & " + str(value_list[i]) + " \\\\")
+print("    \\bottomrule \n \
+\\end{tabular} ")
+
+print()
+print()
 
 count_double_number = 0
 count_char_number = 0
@@ -59,7 +107,7 @@ for key, value in count_key_pairs.items():
         count_double_char += 1
         total_double_char += value
 
-    if value > 20000:
+    if value > 25000:
         freq_typed_key_pairs[key] = value
 
 print(freq_typed_key_pairs)
@@ -68,7 +116,38 @@ print("double number: " + str(count_double_number) + ",   total: " + str(total_d
 print("char + number: " + str(count_char_number) + ", total: " + str(total_char_number))
 print("number + char: " + str(count_number_char) + ", total: " + str(total_number_char))
 
-plt.bar(range(len(freq_typed_key_pairs)), freq_typed_key_pairs.values(), align='center')
-plt.xticks(range(len(freq_typed_key_pairs)), list(freq_typed_key_pairs.keys()))
+key_list = sorted([x for x in freq_typed_key_pairs.keys()])
+value_list = [freq_typed_key_pairs.get(key) for key in key_list]
+
+plt.bar(range(len(freq_typed_key_pairs)), value_list, align='center')
+plt.ylabel('Occurrences')
+plt.yticks(np.arange(0, 175001, 25000))
+plt.xticks(range(len(freq_typed_key_pairs)), key_list)
+
+tikz_save(
+    "fig/char_pair_count.tex",
+    axis_height='\\figH',
+    axis_width='\\figW',
+    extra_axis_parameters=["tick label style={font=\\scriptsize}", "ytick distance=25000"]
+)
 
 plt.show()
+
+
+key_list = sorted([x for x in count_key_pairs.keys()])
+value_list = [count_key_pairs.get(key) for key in key_list]
+
+print("Total amount of key pairs: " + str(len(count_key_pairs)))
+
+plt.bar(range(len(count_key_pairs)), value_list, align='center')
+plt.ylabel('Occurrences')
+plt.yticks(np.arange(0, 175001, 25000))
+
+tikz_save(
+    "fig/char_pair_full_count.tex",
+    axis_height='\\figH',
+    axis_width='\\figW',
+    extra_axis_parameters=["tick label style={font=\\scriptsize}", "ytick distance=25000", "xmajorticks=false", "xlabel={Character Pairs}"])
+
+plt.show()
+
