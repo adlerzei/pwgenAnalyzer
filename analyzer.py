@@ -7,7 +7,7 @@ from tikzplotlib import save as tikz_save
 #plt.style.use("ggplot")
 plt.style.use("seaborn-whitegrid")
 
-out = subprocess.check_output(["pwgen", "-A", "8", "1000000"])
+out = subprocess.check_output(["pwgen", "-s", "-A", "8", "1000000"])
 passwords = out.decode("utf-8").split("\n")
 del passwords[-1]
 
@@ -128,7 +128,8 @@ tikz_save(
     "fig/char_pair_count.tex",
     axis_height='\\figH',
     axis_width='\\figW',
-    extra_axis_parameters=["tick label style={font=\\scriptsize}", "ytick distance=25000"]
+    extra_axis_parameters=["tick label style={font=\\scriptsize}",
+                           "ytick distance=25000"]
 )
 
 plt.show()
@@ -147,7 +148,10 @@ tikz_save(
     "fig/char_pair_full_count.tex",
     axis_height='\\figH',
     axis_width='\\figW',
-    extra_axis_parameters=["tick label style={font=\\scriptsize}", "ytick distance=25000", "xmajorticks=false", "xlabel={Character Pairs}"])
+    extra_axis_parameters=["tick label style={font=\\scriptsize}",
+                           "ytick distance=25000",
+                           "xmajorticks=false",
+                           "xlabel={Character Pairs}"])
 
 plt.show()
 

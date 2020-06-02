@@ -2,7 +2,7 @@ import subprocess
 
 fiveNumbers = False
 
-out = subprocess.check_output(["pwgen", "-A", "8", "1000000"])
+out = subprocess.check_output(["pwgen", "-s", "-A", "8", "1000000"])
 passwords = out.decode("utf-8").split("\n")
 del passwords[-1]
 
