@@ -1,3 +1,23 @@
+# Copyright (C) 2020  Christian Zei
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 import subprocess
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,7 +27,7 @@ from tikzplotlib import save as tikz_save
 #plt.style.use("ggplot")
 plt.style.use("seaborn-whitegrid")
 
-out = subprocess.check_output(["pwgen", "-s", "-A", "8", "1000000"])
+out = subprocess.check_output(["pwgen", "-A", "4", "1000000"])
 passwords = out.decode("utf-8").split("\n")
 del passwords[-1]
 
@@ -53,14 +73,14 @@ print("    \\bottomrule \n \
 
 plt.bar(range(len(count_chars)), value_list, align='center')
 plt.ylabel('Occurrences')
-plt.yticks(np.arange(0, 1000001, 200000))
+plt.yticks(np.arange(0, 200001, 50000))
 plt.xticks(range(len(count_chars)), key_list)
 
 tikz_save(
     "fig/char_count.tex",
     axis_height='\\figH',
     axis_width='\\figW',
-    extra_axis_parameters=["tick label style={font=\\footnotesize}", "ytick distance=200000"]
+    extra_axis_parameters=["tick label style={font=\\footnotesize}", "ytick distance=50000"]
 )
 
 plt.show()
